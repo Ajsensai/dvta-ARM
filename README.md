@@ -19,12 +19,13 @@ Some of the vulnerabilities covered in this Application.
     Clear text data in transit
     Client side protection bypasses using Reverse Engineering
 
-Requires .NET version 4.5
+Requires .NET version 4.5 (4.9x for ARM)
 
 Usage:
 ------
 1. Get the compiled binary from releases. Alternatively, clone the project and compile from the source.
-2. Set up SQL Server and FTP Server - instructions shown here https://youtu.be/rx8mtI1HU5c
+2. Set up SQL Server and FTP Server - instructions shown [here](https://youtu.be/rx8mtI1HU5c)
+3. Arm specific instructions [here](ARM_Setup.md)
 
         Queries used in the video:
 
@@ -62,5 +63,6 @@ Usage:
         )
 
 
-3. Configure the client application to communicate with SQL Server and FTP Server - Instructions shown here https://youtu.be/IBdk2uOessc
-4. Explore and exploit
+3. Configure the client application to communicate with SQL Server and FTP Server - Instructions shown here [here](https://youtu.be/IBdk2uOessc)
+4. Arm releated instructions found [here](ARM_Setup.md)
+5. Explore and exploit!
