@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
 using System.Security.Cryptography;
-using System.Data.SqlClient;
+using System.Data.SQLite;
 using System.Data;
 
 
@@ -14,7 +14,7 @@ namespace DBAccess
     public class DBAccessClass
     {
         String decryptedDBPassword;
-        SqlConnection conn;
+        SQLiteConnection conn;
 
         
         //Function to Decrypt DB Password
@@ -64,14 +64,14 @@ namespace DBAccess
            
             Console.WriteLine(connectionString);
 
-            conn = new SqlConnection();
-            conn.ConnectionString = connectionString;
+            conn = new SQLiteConnection("Data Source=dvta.sqlite;Version=3;"); // Hardcoded connection string to use SQLite
+            //conn.ConnectionString = connectionString; Not required for SQLITE
             conn.Open();
 
         }
 
         // user login
-        public SqlDataReader checkLogin(String clientusername,String clientpassword)
+        public SQLiteDataReader checkLogin(String clientusername,String clientpassword)
         {
             
             String username = clientusername;
@@ -81,7 +81,7 @@ namespace DBAccess
             Console.WriteLine(sqlcmd);
            
            
-            SqlCommand cmd = new SqlCommand(sqlcmd, conn);
+            SQLiteCommand cmd = new SQLiteCommand(sqlcmd, conn);
            
             /*
             SqlDataAdapter sda = new SqlDataAdapter(cmd);
@@ -93,7 +93,7 @@ namespace DBAccess
             return numrowsreturned;
             */
 
-            SqlDataReader dtr = cmd.ExecuteReader();
+            SQLiteDataReader dtr = cmd.ExecuteReader();
 
             return dtr;
 
@@ -108,8 +108,8 @@ namespace DBAccess
 
             bool output = false;
             int isadmin = 0;
-            string sqlquery = "insert into users values('" + clientusername + "','" + clientpassword + "','" + clientemailid + "','" + isadmin + "')";
-            SqlCommand cmd = new SqlCommand(sqlquery, conn);
+            string sqlquery = "insert into users (username, password, email, isadmin) VALUES ('" + clientusername + "','" + clientpassword + "','" + clientemailid + "'," + isadmin + ")";
+            SQLiteCommand cmd = new SQLiteCommand(sqlquery, conn);
 
             try
             {
@@ -129,8 +129,8 @@ namespace DBAccess
         {
 
             bool output = false;
-            string sqlquery = "insert into expenses values('" + addemail + "','" + additem + "','" + addprice + "','" + addDt + "','" + addTime + "')";
-            SqlCommand cmd = new SqlCommand(sqlquery, conn);
+            string sqlquery = "INSERT INTO expenses (email, item, price, date, time) VALUES ('" + addemail + "','" + additem + "','" + addprice + "','" + addDt + "','" + addTime + "')";
+            SQLiteCommand cmd = new SQLiteCommand(sqlquery, conn);
 
             try
             {
@@ -150,9 +150,9 @@ namespace DBAccess
         public DataTable viewExpenses(String emailid)
         {
             
-            SqlCommand objCommand = new SqlCommand("select item, price, date,time from expenses where email='"+emailid+"'", conn);
+            SQLiteCommand objCommand = new SQLiteCommand("select item, price, date,time from expenses where email='"+emailid+"'", conn);
 
-            SqlDataReader rdr = objCommand.ExecuteReader();
+            SQLiteDataReader rdr = objCommand.ExecuteReader();
 
             DataTable objData = new DataTable();
 
@@ -165,9 +165,9 @@ namespace DBAccess
         public DataTable getExpensesOfAll()
         {
             
-            SqlCommand objCommand = new SqlCommand("select * from expenses", conn);
+            SQLiteCommand objCommand = new SQLiteCommand("select * from expenses", conn);
 
-            SqlDataReader rdr = objCommand.ExecuteReader();
+            SQLiteDataReader rdr = objCommand.ExecuteReader();
 
             DataTable objData = new DataTable();
 
@@ -182,7 +182,7 @@ namespace DBAccess
         {
             bool output = false;
             String sqlcmd = "DELETE FROM expenses where email='" + emailid + "'";
-            SqlCommand cmd = new SqlCommand(sqlcmd, conn);
+            SQLiteCommand cmd = new SQLiteCommand(sqlcmd, conn);
 
             try
             {

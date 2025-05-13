@@ -7,7 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
+//using System.Data.SqlClient;
+using System.Data.SQLite;
 using DBAccess;
 using System.Configuration;
 using System.Net;
@@ -21,7 +22,11 @@ namespace DVTA
         public Login()
         {
             InitializeComponent();
-            
+
+            configserver.Visible = false;
+            servertext.Visible = false;
+
+
 
             if (IsBeingDebugged())
             {
@@ -77,7 +82,7 @@ namespace DVTA
 
             db.openConnection();
 
-           SqlDataReader data = db.checkLogin(username,password);
+           SQLiteDataReader data = db.checkLogin(username,password);
            if (data.HasRows)
            {
                String user;
@@ -94,7 +99,7 @@ namespace DVTA
                    user = data.GetString(1);
                    pass = data.GetString(2);
                    email = data.GetString(3);
-                   isadmin = (int) data.GetValue(4);
+                   isadmin = Convert.ToInt32(data.GetValue(4)); // Modified to support SQLite
 
                    if (user != "admin")
                    {
@@ -164,7 +169,7 @@ namespace DVTA
         private void button1_Click(object sender, EventArgs e)
         {
             string serverip = servertext.Text;
-            string dbserver = serverip + "\\SQLEXPRESS";
+            string dbserver = serverip + "\\SQLite";
            
 
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
